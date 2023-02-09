@@ -2,5 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
+.Renviron
 dsa job market/
 minimum wages and employment: a case study of the fast-food industry in new jersey and pennsylvania/
+dsa_job_market_2023/data/
+dsa_job_market_2023/data/jobs_search_list
+dsa_job_market_2023/05_blog_post.R
