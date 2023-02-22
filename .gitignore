@@ -8,3 +8,5 @@ minimum wages and employment: a case study of the fast-food industry in new jers
 dsa_job_market_2023/data/
 dsa_job_market_2023/data/jobs_search_list
 dsa_job_market_2023/05_blog_post.R
+dsa_job_market_2023/06_upload_to_gbq.R
+dsa_job_market_2023/07_text_embeddeding.R

@@ -1,0 +1,502 @@
+---
+title: "2023-02-22 DA Take Home Test"
+author: "Chun Yu, Ko"
+date: "2023-02-22"
+output:
+  prettydoc::html_pretty:
+    theme: leonids
+    highlight: github
+    toc: true
+    toc_depth: 2
+    number_sections: true
+---
+
+# Dashboard
+
+> 請透過 Google Demo Account 的數據中 Google Merchandise Store 的數據,選擇前
+五項重要的指標,使用 Google Data Studio 製作 Dashboard,並簡單解釋選擇該指標
+的理由。
+
+## Warm up
+
+數據分析師在進行工作時通常會遵循「數據分析生命週期」作為主要的工作流程
+
+其中「確認需求」和「釐清需求」是首要任務
+
+[參考資訊：6 大經典的資料分析生命週期(Data analysis life cycle)](https://medium.com/girlfriend-no-not-really-my-area/6-%E5%A4%A7%E7%B6%93%E5%85%B8%E7%9A%84%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90%E7%94%9F%E5%91%BD%E9%80%B1%E6%9C%9F-data-analysis-life-cycle-47761290243f)
+
+在這個框架中，會與利害關係人先探討產品目標
+
+然後根據這些目標來定義成功指標（也可能是北極星指標）
+
+接著，將拆分這些指標，並確定哪些是領先指標，哪些是落後指標
+
+以此來建立合理的數據脈絡。最終才會建立報表並評估產品現況
+
+因此，本案將會逐步以：
+
+ 1. 確立產品目標
+ 
+ 2. 釐清數據脈絡
+ 
+ 3. 建立相關報表
+
+## 確立產品目標
+
+根據 Google Search 網站中所述
+Google 的使命是
+
+> Google 的使命是彙整全球資訊，供大眾使用，使人人受惠。
+
+作為一個電子商務的網站「Google Merchandise Store」
+
+該產品最有可能的在商業目的中達到增加營收的功能
+
+但事實上，Google 的母公司 Alphabet 在美國證交所最新揭露的 [2022 年年報](https://www.sec.gov/Archives/edgar/data/1652044/000165204423000016/0001652044-23-000016-index.htm) 中提到
+
+該公司主要以提供廣告、或數位銷售相關服務為主要收入來源
+
+故「Google Merchandise Store」並非該公司最主要的收入來源
+
+而在該網站中所販售的產品也不能體現該公司最主要的產品、服務價值
+
+推測網站的目的不僅、或可能不是作為增加營收的一種手段
+
+觀察該網站中所販售的各類產品，都有相對清楚、明確、一致的設計思想
+
+體現了清晰的企業識別、品牌視覺形象
+
+該網站更可能是作為銷售一系列用以推廣品牌形象、僱主品牌、加強品牌意識的附屬產品
+
+因此，在本案中假設該網最主要的目的是藉電商網頁
+
+販賣商品讓購買、或被贈與相關產品的受眾能時常攜帶相關產品
+
+以此加身該產品在市場中的形象，也就是：「讓更多人能看見並加強對 Google 的印象」。
+
+如果定義該網站的目的是「讓更多人能看見並加強對 Google 的印象」
+
+則商品收益可能是可以作為關鍵指標
+
+然而，從 Google Merchandise Store GA 報表中的「電子商務購買」報表查詢 2022 年 9 月後的銷售數據來看
+
+售出的 673 項 SKU 單價（已排除未曾被購買過的商品、或 0 元商品
+
+ - 平均值：21
+ 
+ - 中位數：15
+ 
+ - 最低：0.85
+ 
+ - 最高：126.93
+ 
+也就是說，各個 SKU 的單價有高有低
+
+因此，被商品價格所影響的商品收益
+
+不一定適合作為觀測「讓更多人能看見並加強對 Google 的印象」的目標
+
+因為商品收益高時可能是銷售了較多的高單價商品
+
+商品收益低時也有可能是因為較多的低單價商品被售
+
+所以，與其使用商品收益，使用已購買商品數代表可能有多少商品可以被大眾所看見
+
+可能對目標的衡量更具效果，因此
+
+>  Google Merchandise Store 的北極星指標是「購買商品數」
+
+
+## 釐清數據脈絡
+
+### basic midset
+
+首先，北極星指標是「購買商品數」
+
+從這個最關鍵的指標開始，依循核心商業模式與思維
+
+向前（Leading index）、向後（Lagging index）選擇合適的指標組織數據脈絡
+
+而數據脈絡存在的最主要原因是，維度 dimension 與指標 index 
+
+可以有千萬種組合，並不是所有數字都需要逐一檢視（指標是可以被使用維度拆分）
+
+透過既存且與 stakeholder 達成共識的數據脈絡來觀察產品現況
+
+除了能快速釐清數據、也容易凝聚共識
+
+而從北極星指標向前拆分的幾個重要指標
+
+應該容易理解、簡單好懂、可以方便設定要達成的目標
+
+所以盡可能在此階段避免討論以 portion、rate、ratio 來表達的指標
+
+### 五個最重要的指標
+
+為了完善數據脈絡，首先先觀察用戶在進入 Google Merchandise Store 後的使用經歷與流程：
+
+首先須先選擇所在（運送）地區，而後開始瀏覽商店與商品頁面
+
+若一個已經登入的用戶要產生對「已購買商品數」的貢獻，則該用戶需經歷的單次順向購買流程應該至少包含：
+
+進入 Store Home ➜ 瀏覽商品 ➜ 將商品加入購物車 ➜ 點擊結帳 ➜ 填寫運送資訊 ➜ 填寫付款資訊 ➜ 完成結帳。
+
+購買商品數可以被記錄為結帳訂單數與平均每張訂單的商品數的乘積，也就是：
+
+$結帳訂單數 × 平均商品數 = 已購買商品數$
+
+其中，結帳訂單數可以視為購物流程漏斗中的最後一步，該漏斗可能是：
+
+將商品加入購物車 ➜ 點擊結帳（加入後直接點擊結帳、加入後點擊進入購物車才結帳） ➜ 填寫寄送資訊 ➜ 填寫付款資訊 ➜ 完成結帳。
+
+而能將商品加入購物車的前提則是先進入網站 ➜ 瀏覽商品頁等
+
+最終，可以把購買商品數的領先指標向前描述為：
+
+  1. 入站：代表網站的流量，沒有流量就難以帶來轉換
+
+  2. 加入購物車：表示用戶對哪些商品有興趣
+
+  3. 點擊結帳：表示購買的心念已動
+
+  4. 完成結帳：順利完成付款（結帳流程沒有技術問題、且用戶沒有被結帳流程或金額嚇退）
+
+  5. 購買商品數：北極星指標，距離「更多人看見 Google 更進一步」
+  
+## 建立相關報表
+
+### 報表設定
+
+> user story: 作為 Google Merchandise Store 運營成員，我希望每天可以迅速了解產品概況，以便順利進行運營操作、與其他夥伴討論策略、了解是否有異常發生
+
+  1. 這是一份協助公司全員了解產品基本概況的報告
+  
+  2. 主要會透過 email、或直接入站查看
+  
+  3. 在這張報表上只顯示最近 30 天的資訊，不需要操作
+  
+  4. 對更多資訊有興趣的夥伴考以到非 summary 類型的 dashboard 或其他工具進行探索
+  
+  5. 假設公司成員 data literacy 程度不一致，盡可能添加說名、圖例、指標從簡、直觀
+  
+  6. 字要大，避免多種裝置閱讀不易
+  
+  7. 提綱提及的五個重點指標都會在報表中呈現，但會以討論整體產品的概況作為切角，而不是五個指標
+  
+### 資訊架構
+
+#### 購買商品數
+
+最重要的北極星指標擺在第一
+
+  1. 描述昨天、前七天、前三十天、今年的狀況，可以快速判斷情勢並了解目標達成狀況
+  
+  2. 描述近三十天每天的購買商品數趨勢、以及前一個三十天的趨勢對比
+
+#### 銷售漏斗
+
+描述主要產生增加北極星指標，的主要漏斗
+
+  1. 漏斗：描述近三十天平均每天的數據，包含：入站人數、瀏覽商品資訊人數、加入購物車、人數、點擊結帳人數、完成結帳次數
+  
+  2. 最近三十天每日銷售漏斗趨勢：可以仔細 mouse over 每天的數量，雖然各個 funnel 上的 step 量級差很多，但要看每一天是多少、或有爆量、異常可能可以有所竟是
+
+#### 入站流量品質
+
+主要流量來自新用戶，而新用戶作為 acquisition 也應要被獨立觀察
+
+  1. 呈現入站流量的新老用戶組成
+  
+  2. 說明新用戶組成（traffic source）
+  
+  3. 單獨說明 acquisition 品質，也就是新用戶的銷售漏斗
+  
+  4. 單獨說明 acquisition 的不同渠道對北極星指標的貢獻
+  
+
+#### 結帳流程
+
+作為常規流程轉換的觀察、以及服務穩定性的觀察
+
+  1. stepwise conversion 單步轉換每日趨勢：完成結帳 / 點擊結帳、點擊結帳 / 加入購物車
+
+  2. 最近三十天各商品類型加入購物車次數：了解最近哪些商品比較熱門
+  
+  3. 單獨拉出加入購物車後點擊結帳、完成結帳的數量，以便配和轉換率進行觀察
+
+
+
+
+## Dashboard 在這裏
+
+[Google Merchandise Store Performance Overview](https://lookerstudio.google.com/u/0/reporting/54410d24-db04-4324-9e7b-42ca66d269fe/page/tR5FD)
+
+# SQL Query
+
+> 請使用 SQL,透過以下兩個表格 (notification_clicked, ec_purchase),計算「商品 X 」
+的推播購買轉換率。轉換率公式:可歸因購買數 / 總推播點擊人數(請注意:點擊推播後 30 分鐘內完成的購買行為,才視為可歸因購買行為。)
+
+## 需求評估
+
+### 釐清用戶行為路徑
+
+此案的需求是需要使用兩個表格的數據進行處理
+
+原則上用戶接收單一通知後的行為路徑應該是：
+
+ 1. notification received
+ 
+ 2. notification displayed
+ 
+ 3. notification clicked (can be dismiss or fold, but may not get record from iOS if using Firebase Analytics)
+ 
+ 4. explore product detail or others
+ 
+ 5. convert
+
+### 以時間限制最終轉換的手段進行歸因
+
+根據 schema 兩個 table 的數據可能不是單純一對一、一對多的關係
+
+也沒有清楚到 per event 的 key 可以進行關聯
+
+此外也需要限制點擊後至轉換的時間
+
+所以沒辦法只用 aggrgate function 來完成
+
+此外，無論一個 Camapign 只發送一次、或發送多次通知
+
+進行查詢應盡可能仿造用戶行為路徑進行最終轉化來源歸因
+
+也就是要避免 convert 跟 indirect 的 click 被視為一個有效的轉換路徑
+
+### 可讀性優先、關注點分離
+
+考量到可讀性盡可能地用 with as clause 來執行查詢
+
+並盡可能添加註解（實際執行專案可能會比較簡略）
+
+並假設 SQL 是在 Google Cloud Platform 的 BigQuery 運行
+
+故應能無視使用 CTE (with as clause) 執行的 [疑慮](https://stackoverflow.com/questions/14889654/inline-query-versus-with-clause-for-performance-issue)
+
+### 可擴充性、復用的可能、與過度設計
+
+推播通知歸因在用戶溝通中作為一個常見手段
+
+其成效與轉換時常會有需要使用
+
+雖然需求中沒有提及需要定期執行
+
+並考量此需求可能還在最初的 POC 階段
+
+不另行建立 store procedure or function
+
+但保留參數的預先定義（包含一次可以指定單一或多個 product 進行查詢）
+
+未來確定該 query 的實用性後才會將其改為 store procedure
+
+或放入 schedule query or cron or airflow 中
+
+### 資料品質驗證與後續應用
+
+需求可能還在 POC 階段會需要更完整的資訊來協助判斷
+
+另外，沒有特別提及 data 在 etl 階段是否有經過特別的 validation 
+
+或是有 data table 的任何對 column 的限制
+
+因此，在應盡可能的依據需求對資料取得時加上條件要求
+
+在 output 時也把相關資訊都收集起來，協助釐清成效基本資訊
+
+也有後續使用的可能 [systematic review](Conducting proportional meta-analysis in different types of systematic reviews: a guide for synthesisers of evidence
+)
+
+### 資料流設計
+
+因此 query data flow 的設計會是：
+
+ 1. 定義時間區間與產品參數
+ 
+ 2. 取得 notification_clicked 資訊
+ 
+ 3. 取得 ec_purchased 資訊
+ 
+ 4. 合併 union notification_clicked 與 ec_purchased 資訊
+ 
+ 5. 依時間順序以 window function 整理不同產品與用戶的 click 與 purchase 行為並標記每一個事件的前一行為
+ 
+ 6. 針對 purchase 事件與前一個事件的時間差評估是否符合轉換要素
+ 
+ 7. 將整理好的數據以 aggregate function 整理好並輸出
+
+### Out table schema 發想
+
+簡單明確的案子可能會先想好，到最後也不會改 schema
+
+但部分的探索、或大型的 observational study 可能會大致發想並邊做邊改
+
+ - product (string): 哪個產品，依據 input 可能有很多
+ 
+ - time_start (datetime): 最早有行為的時間
+ 
+ - time_end (datetime): 最後有行為的時間
+ 
+ - member_all (int): 有多少用戶有產生事件
+ 
+ - member_all_click (int): 有多少用戶有產生點擊事件
+ 
+ - member_all_purchase (int): 有多少用戶有產生購買事件
+ 
+ - member_converted_purchase (int): 有多少用戶在點擊後產生可歸因的購買事件
+ 
+ - record (int): 有多少事件
+ 
+ - all_click (int): 有多少點擊事件
+ 
+ - all_purchase (int): 有多少購買事件
+ 
+ - converted_purchase (int): 有點擊後產生可歸因的購買事件
+ 
+ - conversion_rate (string): 轉換率，poc 階段不考慮使用報表呈現，故先將資訊整理便讀，後後續可能調整
+ 
+ - average_converted_duration (float): 可歸因的購買事件平均轉換時長
+ 
+ - quantiles_converted_duration (array<int>): 可歸因的購買事件轉換時長的 min、25%、median、75%、max
+
+## SQL 在這裏
+
+```SQL
+# Assuming that this query will be executed on BigQuery and
+# that readability is a higher priority than efficiency, it
+# is important to optimize the code for future use. Therefore,
+# the following three variables are defining ahead of time
+# since they may be used frequently:
+
+declare var_date_start date default date(2023,01,01);
+declare var_date_end date default date_add(var_date_start, interval 30 day);
+declare var_product array<string> default ["X"];
+
+with
+
+# To ensure that the query can be executed in a different project,
+# the project_id is added in the "from" clause.
+
+# Even though the documentation specifies that the "event" should
+# always be "notification_clicked," it is recommended to add this
+# sort of condition to the where clause regardless, as it can 
+# improve the quality of the results and also prevent potential
+# errors.
+
+  notification_clicked as 
+    (
+      select
+        event,
+        memberId as member_id,
+        datetime(createdAt) as create_time,
+        product
+      from `project_id.dataset.notification_clicked`
+      where datetime(createdAt) between var_date_start and var_date_end
+        and event = "notification_clicked"
+        and product in (select class from unnest(var_product) as class)
+        and memberId is not null
+    ),
+  
+  ec_purchased as 
+    (
+      select
+        event,
+        memberId as member_id,
+        datetime(createdAt) as create_time,
+        product
+     from `project_id.dataset.ec_purchased`
+     where datetime(createdAt) between var_date_start and var_date_end
+        and event = "ec_purchased"
+        and product in (select class from unnest(var_product) as class)
+        and memberId is not null 
+    ),
+  
+  behavior as 
+    (
+      select
+        *
+      from notification_clicked
+        union all
+      select
+        *
+      from ec_purchased
+    ),
+  
+  behavior_last_event as 
+    (
+      select
+        product
+        member_id,
+        event,
+        create_time,
+        lag(create_time) over(partition by product, member_id order by create_time) as previous_create_time,
+        lag(event) over(partition by product, member_id order by create_time) as previous_event
+      from behavior 
+    ),
+
+# Clearer definitions for the values in the "converted" column:
+# True: "notification_clicked" event occurs and a purchase is made
+# within 30 seconds of the event
+# False: purchase is made before the "notification_clicked" event
+# or more
+# than 30 seconds after the event
+# Null: "notification_clicked", never trigger "ec_purchased" event
+
+  behavior_convert as 
+    (
+      select
+        *,
+        (event = "ec_purchased" and previous_event = "notification_clicked" and datetime_diff(create_time, previous_create_time, second) between 0 and 30) as converted,
+        datetime_diff(create_time, previous_create_time, second) as duration
+      from behavior_last_event
+    )
+  
+# Data validation is a critical initial step when working with
+# data, as it helps ensure data accuracy and reliability. To
+# facilitate this process, the additional columns are added to
+# help identify potential issues that may arise when running
+# campaigns or processing data.
+
+# The numerator "member_converted_purchase" and denominator
+# "member_all_click"used in conversion calculations will be
+# preserved for further examination, such as systematic review.
+
+# Average duration is a useful metric that can be used to measure
+# time-to-event or time-to-incidence. In some cases, when
+# conversion rates are very similar across campaigns, the average
+# incidence duration can provide additional insights into the
+# performance of each campaign.
+
+  select
+    product,
+    min(create_time) as time_start,
+    max(create_time) as time_end,
+    count(distinct member_id) as member_all,
+    count(distinct if(event = "notification_clicked", member_id, null)) as member_all_click,
+    count(distinct if(event = "ec_purchased", member_id, null)) as member_all_purchase,
+    count(distinct if(event = "ec_purchased" and converted, member_id, null)) as member_converted_purchase,
+    count(1) as record,
+    countif(event = "notification_clicked") as all_click,
+    countif(event = "ec_purchased") as all_purchase,
+    countif(event = "ec_purchased" and converted) as converted_purchase,
+    concat(
+      round(
+        safe_divide(
+          count(distinct if(event = "ec_purchased" and converted, member_id, null)),
+          count(distinct if(event = "notification_clicked", member_id, null))
+          ) * 100, 6
+          ), "%"
+          ) as conversion_rate,    
+    avg(if(event = "ec_purchased" and converted, duration, null)) as average_converted_duration,
+    approx_quantiles(if(event = "ec_purchased" and converted, duration, null), 4 ignore nulls) as quantiles_converted_duration
+    
+  from behavior_convert
+  group by 1
+  order by 2 desc
+```
